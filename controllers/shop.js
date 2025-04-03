@@ -2,13 +2,23 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/product-list', {
-      prods: products,
-      pageTitle: 'All Products',
-      path: '/products'
-    });
-  });
+
+  Product.findAll().then(
+    products => {
+      res.render('shop/product-list', {
+        prods: products,
+        pageTitle: 'All Products',
+        path: '/products'
+      });
+    }
+  ).catch()
+  // Product.fetchAll(products => {
+  //   res.render('shop/product-list', {
+  //     prods: products,
+  //     pageTitle: 'All Products',
+  //     path: '/products'
+  //   });
+  // });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -27,15 +37,26 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-  .then(([rows, fieldData])=> {
-    res.render('shop/index', {
-      prods: rows,
-      pageTitle: 'Shop',
-      path: '/'
-    });
-  })
-  .catch(err => console.log(err));
+  Product.findAll().then(
+    products => {
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/'
+      });
+    }
+  ).catch()
+
+
+  // Product.fetchAll()
+  // .then(([rows, fieldData])=> {
+  //   res.render('shop/index', {
+  //     prods: rows,
+  //     pageTitle: 'Shop',
+  //     path: '/'
+  //   });
+  // })
+  // .catch(err => console.log(err));
    
 };
 
