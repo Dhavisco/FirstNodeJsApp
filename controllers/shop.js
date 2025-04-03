@@ -24,9 +24,6 @@ exports.getProduct = (req, res, next) => {
   .catch(err => {
     console.log(err);
   });
-  product => {
-    
-  }
 };
 
 exports.getIndex = (req, res, next) => {
