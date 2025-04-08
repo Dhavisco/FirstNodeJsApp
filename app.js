@@ -19,6 +19,14 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next)=> {
+  User.findByPk(1)
+  .then(user => {
+    req.user = user;
+    next()
+  }).catch(err => console.log(err));
+}) 
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -31,10 +39,19 @@ Product.belongsTo(User, {
 });
 User.hasMany(Product);
 
-sequelize.sync({force: true}).then(result => {
+sequelize.sync().then(result => {
+  return User.findByPk(1);
 //   console.log(result);
+}).then(user => {
+  if(!user){
+    User.create({name:'David', email:'test@test.com'})
+  }
+  return user;
+}).then(user => {
+  // console.log(user)
   app.listen(3000);
-}).catch(err => {
+})
+.catch(err => {
   console.log(err);
 })
 
