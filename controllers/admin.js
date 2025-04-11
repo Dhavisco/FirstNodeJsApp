@@ -30,7 +30,6 @@ req.user.createProduct(
 
   }
 ).then(result => {
- s
   console.log('Created Product');
   res.redirect('/admin/products');
 }).catch(err => {
