@@ -2,10 +2,10 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
-const User = require('./models/user');
+// const User = require('./models/user');
 
 // const sequelize = require('./util/database');
 // const Product = require('./models/product')
@@ -27,62 +27,31 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next)=> {
+// app.use((req, res, next)=> {
 
 
-  User.findById('6802bc80f8182c8910f28403')
-  .then(user => {
-    req.user =new User(user.name, user.email, user.cart, user._id);
-     //user;
-    next()
-  }).catch(err => console.log(err));
-}) 
+//   User.findById('6802bc80f8182c8910f28403')
+//   .then(user => {
+//     req.user =new User(user.name, user.email, user.cart, user._id);
+//      //user;
+//     next()
+//   }).catch(err => console.log(err));
+// }) 
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(() => {
+//mongoose
+mongoose
+.connect('mongodb+srv://Davisco:Davisco32@cluster0.wkwvdtq.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0')
+.then(result => {
+  console.log('Connected to MongoDB');
   app.listen(3000);
-  
 }
-);
-
-
-//Sequelize
-// Product.belongsTo(User, {
-//   constraints: true,
-//   onDelete: 'CASCADE'
-// });
-// User.hasMany(Product);
-// User.hasOne(Cart);
-// Cart.belongsTo(User);
-// Cart.belongsToMany(Product, {through: CartItem});
-// Product.belongsToMany(Cart, {through: CartItem});
-// Order.belongsTo(User);
-// User.hasMany(Order);
-// Order.belongsToMany(Product, {through:OrderItem})
-
-// sequelize
-// .sync()
-// // .sync()
-// .then(result => {
-//   return User.findByPk(1);
-// //   console.log(result);
-// }).then(user => {
-//   if(!user){
-//     User.create({name:'David', email:'test@test.com'})
-//   }
-//   return user;
-// }).then(user => {
-//   // console.log(user)
-//   return user.createCart();
-// }).then (cart => {
-//   app.listen(3000);
-// })
-// .catch(err => {
-//   console.log(err);
-// })
+).catch(err => {
+  console.log(err);
+});
 
 
