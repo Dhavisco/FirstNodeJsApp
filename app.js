@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
-// const User = require('./models/user');
+const User = require('./models/user');
 
 // const sequelize = require('./util/database');
 // const Product = require('./models/product')
@@ -27,16 +27,16 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next)=> {
+app.use((req, res, next)=> {
 
 
-//   User.findById('6802bc80f8182c8910f28403')
-//   .then(user => {
-//     req.user =new User(user.name, user.email, user.cart, user._id);
-//      //user;
-//     next()
-//   }).catch(err => console.log(err));
-// }) 
+  User.findById('68078b10ea1fb70a3a54ee6f')
+  .then(user => {
+    req.user = user;
+     //user;
+    next()
+  }).catch(err => console.log(err));
+}) 
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -47,11 +47,23 @@ app.use(errorController.get404);
 mongoose
 .connect('mongodb+srv://Davisco:Davisco32@cluster0.wkwvdtq.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0')
 .then(result => {
-  console.log('Connected to MongoDB');
+  User.findOne().then(user => {
+    if (!user) {
+      const user = new User({
+        name: 'Davisco',
+        email: 'davisco@test.com',
+        cart: {
+          items: []
+        }
+      });
+      user.save();
+    }
+  });
   app.listen(3000);
-}
-).catch(err => {
+})
+.catch(err => {
   console.log(err);
 });
+
 
 
