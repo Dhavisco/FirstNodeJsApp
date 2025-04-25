@@ -123,29 +123,14 @@ exports.postEditProduct = (req, res, next) => {
     console.log(err);
     // Handle the error appropriately
   });
-  // const updatedProduct = new Product(
-  //   prodId,
-  //   updatedTitle,
-  //   updatedImageUrl,
-  //   updatedDesc,
-  //   updatedPrice
-  // );
-  // updatedProduct.save();
   res.redirect('/admin/products');
 };
 
 exports.getProducts = (req, res, next) => {
-  // Product.fetchAll(products => {
-  //   res.render('admin/products', {
-  //     prods: products,
-  //     pageTitle: 'Admin Products',
-  //     path: '/admin/products'
-  //   });
-  // });
-  // Product.findAll()
-
-  // req.user.getProducts()
   Product.find()
+  // .select('title price _id imageUrl')
+  // .populate('userId', 'name')
+  // .populate('userId') 
   .then(products => {
   
     res.render('admin/products', {
